@@ -80,12 +80,6 @@ the laptop itself.
 | 8 | Dashboard: agent status, severity breakdown, custom detections | ⬜ Not started |
 | — | `windows-worker` (agent-only, lowest priority) | ⬜ Not started |
 
-## Repo contents
-
-- `LOG.md` — every issue hit during the build, with root cause and resolution, logged as it happened
-- `TICKET.md` — the Jira ticket content this build is scoped against (objective, acceptance criteria, subtasks)
-- `README.md` — this file
-
 ## Tech stack
 
 AWS EC2 / VPC / Security Groups · Docker + Docker Compose · Wazuh 4.14.7
