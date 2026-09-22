@@ -83,3 +83,8 @@ graph TD
 AWS EC2 / VPC / Security Groups / Systems Manager (Fleet Manager) · Docker +
 Docker Compose · Wazuh 4.14.7 (manager, indexer, dashboard) · DVWA · Ubuntu
 24.04 LTS · Apache · MySQL · PHP 8.3 · Windows Server 2022
+
+## Full Write-Up
+
+The complete phase-by-phase build log — including every bug hit and how it
+was fixed — is in [`consolidated-report.docx`](Wazuh POC.docx).
