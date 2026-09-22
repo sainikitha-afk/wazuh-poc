@@ -1,0 +1,31 @@
+<!-- Sanitized excerpts from ossec.conf -->
+<!-- Real webhook URLs / credentials removed - never commit secrets -->
+
+<!-- Slack alerting for high-severity alerts (level >= 7) -->
+<integration>
+  <name>slack</name>
+  <hook_url>YOUR_SLACK_WEBHOOK_URL_HERE</hook_url>
+  <level>7</level>
+  <alert_format>json</alert_format>
+</integration>
+
+<!-- Email alerting via a custom Python integration - Wazuh's built-in
+     mailer only supports unauthenticated SMTP, which modern providers
+     like Gmail don't allow, so a custom script (SMTP + STARTTLS) is
+     used instead. See integrations/custom-gmail. -->
+<integration>
+  <name>custom-gmail</name>
+  <level>7</level>
+  <alert_format>json</alert_format>
+</integration>
+
+<!-- SOAR-style automated response: auto-block the attacker's IP when the
+     brute-force escalation rule (100003) fires, then automatically
+     reverse the block after 120 seconds - no manual intervention needed -->
+<active-response>
+  <disabled>no</disabled>
+  <command>firewall-drop</command>
+  <location>local</location>
+  <rules_id>100003</rules_id>
+  <timeout>120</timeout>
+</active-response>
