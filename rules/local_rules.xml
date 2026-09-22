@@ -1,0 +1,51 @@
+<!-- Custom Wazuh Detection Rules -->
+<!-- Written for Wazuh SIEM/SOAR PoC -->
+
+<group name="dvwa,web,attack,">
+
+  <rule id="100002" level="3">
+    <if_sid>31100</if_sid>
+    <url>/dvwa/vulnerabilities/brute/</url>
+    <description>DVWA: brute-force login page accessed.</description>
+    <group>dvwa,authentication_failed,</group>
+  </rule>
+
+  <rule id="100003" level="10" frequency="5" timeframe="120">
+    <if_matched_sid>100002</if_matched_sid>
+    <same_source_ip />
+    <description>DVWA: Multiple brute-force login attempts detected from the same source IP.</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+    <group>dvwa,attack,authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,</group>
+  </rule>
+
+</group>
+
+<group name="dvwa,web,attack,">
+
+  <rule id="100004" level="10">
+    <if_sid>31100</if_sid>
+    <url type="pcre2">/dvwa/vulnerabilities/sqli/\?id=[^&]*(%27|%22|'|")</url>
+    <description>DVWA: SQL Injection attempt detected on sqli page (quote character in query).</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+    <group>dvwa,attack,sql_injection,pci_dss_6.5.1,gdpr_IV_35.7.d,</group>
+  </rule>
+
+</group>
+
+<group name="windows,attack,">
+
+  <rule id="100005" level="10">
+    <if_group>windows</if_group>
+    <field name="win.system.eventID">^4720$</field>
+    <description>Windows: New local user account created - possible persistence.</description>
+    <mitre>
+      <id>T1136</id>
+    </mitre>
+    <group>windows,attack,persistence,pci_dss_10.2.7,gdpr_IV_35.7.d,</group>
+  </rule>
+
+</group>
