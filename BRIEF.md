@@ -42,9 +42,5 @@ deliberately vulnerable target app — following Wazuh's own documented PoC meth
 8. Configure Slack/email alerting for high-severity matches
 9. Configure Active Response (auto-block attacker IP)
 10. Build Wazuh dashboard (agent status, severity breakdown, custom detections)
+11. Windows endpoint and remaining Wazuh PoC
 
-## Out of Scope (this iteration)
-Windows endpoint (added opportunistically if time allows), and remaining Wazuh PoC
-use cases not relevant to this focus (File Integrity Monitoring, YARA, VirusTotal,
-Shellshock, vulnerability detection, LLM enrichment, cloud infra monitoring) —
-reasonable candidates for a follow-up.
