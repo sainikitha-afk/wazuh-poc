@@ -32,36 +32,26 @@ Manager for the Windows box) to run commands, but nothing described above
 actually runs on the laptop itself.
 
 ## Architecture
-                 AWS VPC (isolated private network)
-┌───────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   linux-worker (EC2)          windows-worker (EC2)              │
-│   ┌─────────────────┐         ┌──────────────────┐              │
-│   │ Apache + PHP     │         │ Windows Server    │              │
-│   │ + MySQL + DVWA   │         │ 2022               │              │
-│   │                  │         │                    │              │
-│   │ Wazuh agent  ────┼───┐ ┌───┤ Wazuh agent        │              │
-│   │ (no Docker)      │   │ │   │                    │              │
-│   └─────────────────┘   │ │   └──────────────────┘              │
-│                         ▼ ▼   port 1514/1515 (private IP only)  │
-│                    ┌──────────────────┐                         │
-│                    │  wazuh-manager    │                         │
-│                    │  (EC2, Docker)    │                         │
-│                    │  ┌────────────┐   │                         │
-│                    │  │  manager   │   │                         │
-│                    │  ├────────────┤   │                         │
-│                    │  │  indexer   │   │                         │
-│                    │  ├────────────┤   │                         │
-│                    │  │  dashboard │   │                         │
-│                    │  └────────────┘   │                         │
-│                    └──────────────────┘                         │
-└───────────────────────────────────────────────────────────────┘
-                                 │
-                                 ▼
-                      Alert → Slack / email
-                                 │
-                                 ▼
-                Active Response → auto-block attacker IP
+
+```mermaid
+graph TD
+    subgraph VPC["AWS VPC (isolated private network)"]
+        LW["linux-worker (EC2)<br/>Apache + PHP + MySQL + DVWA<br/>Wazuh agent"]
+        WW["windows-worker (EC2)<br/>Windows Server 2022<br/>Wazuh agent"]
+        subgraph WM["wazuh-manager (EC2, Docker)"]
+            MGR["manager"]
+            IDX["indexer"]
+            DASH["dashboard"]
+        end
+        LW -->|"port 1514/1515<br/>(private IP only)"| MGR
+        WW -->|"port 1514/1515<br/>(private IP only)"| MGR
+        MGR --> IDX
+        IDX --> DASH
+    end
+    MGR -->|Alert| SLACK["Slack"]
+    MGR -->|Alert| EMAIL["Email"]
+    MGR -->|"Active Response<br/>(auto-block IP)"| LW
+```
 
 ## Why each piece exists
 
